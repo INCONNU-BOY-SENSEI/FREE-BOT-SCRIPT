@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ORION-MD — Pairing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0d16;
+  --bg-2:#0f1424;
+  --panel:#131a2e;
+  --line:#232c47;
+  --star:#f2c879;
+  --star-2:#e2965a;
+  --text:#e8ecf7;
+  --muted:#8791ab;
+  --ok:#6fcf97;
+  --err:#eb6161;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:radial-gradient(ellipse at 50% -10%, #172041 0%, var(--bg) 55%);
+  color:var(--text);
+  font-family:'Space Grotesk', sans-serif;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:32px 18px;
+  overflow-x:hidden;
+}
+.sky{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+}
+.sky span{
+  position:absolute;
+  width:2px;
+  height:2px;
+  background:#fff;
+  border-radius:50%;
+  opacity:.5;
+  animation:twinkle 4s ease-in-out infinite;
+}
+@keyframes twinkle{
+  0%,100%{opacity:.15;}
+  50%{opacity:.85;}
+}
+.card{
+  position:relative;
+  z-index:1;
+  width:100%;
+  max-width:440px;
+  background:linear-gradient(180deg, var(--panel) 0%, var(--bg-2) 100%);
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:38px 32px 30px;
+  box-shadow:0 30px 80px -30px rgba(0,0,0,.7);
+}
+.belt{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  margin-bottom:18px;
+}
+.belt span{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--star);
+  box-shadow:0 0 10px var(--star);
+}
+.belt .line{
+  width:36px;
+  height:1px;
+  background:linear-gradient(90deg, transparent, var(--star), transparent);
+}
+h1{
+  font-family:'Cinzel', serif;
+  font-size:26px;
+  letter-spacing:.14em;
+  text-align:center;
+  margin:0 0 4px;
+  background:linear-gradient(90deg, var(--star), var(--star-2));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+.tagline{
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+  letter-spacing:.04em;
+  margin-bottom:30px;
+}
+label{
+  display:block;
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:8px;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+}
+.input-row{
+  display:flex;
+  gap:10px;
+}
+input[type="text"]{
+  flex:1;
+  background:var(--bg);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:14px 16px;
+  color:var(--text);
+  font-family:'JetBrains Mono', monospace;
+  font-size:15px;
+  outline:none;
+  transition:border-color .2s;
+}
+input[type="text"]:focus{
+  border-color:var(--star);
+}
+button{
+  width:100%;
+  margin-top:16px;
+  padding:14px 16px;
+  border:none;
+  border-radius:12px;
+  background:linear-gradient(90deg, var(--star), var(--star-2));
+  color:#1a1206;
+  font-family:'Space Grotesk', sans-serif;
+  font-weight:700;
+  font-size:15px;
+  letter-spacing:.03em;
+  cursor:pointer;
+  transition:transform .15s, opacity .15s;
+}
+button:hover{transform:translateY(-1px);}
+button:disabled{opacity:.55;cursor:not-allowed;transform:none;}
+.result{
+  margin-top:26px;
+  border-top:1px dashed var(--line);
+  padding-top:22px;
+  text-align:center;
+  display:none;
+}
+.result.show{display:block;}
+.result .label{
+  color:var(--muted);
+  font-size:12px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  margin-bottom:10px;
+}
+.code{
+  font-family:'JetBrains Mono', monospace;
+  font-size:34px;
+  font-weight:700;
+  letter-spacing:.12em;
+  color:var(--star);
+  word-break:break-all;
+}
+.status{
+  margin-top:14px;
+  font-size:13px;
+  color:var(--muted);
+}
+.status.err{color:var(--err);}
+.status.ok{color:var(--ok);}
+.steps{
+  margin-top:22px;
+  font-size:12.5px;
+  color:var(--muted);
+  line-height:1.7;
+}
+.steps b{color:var(--text);}
+footer{
+  text-align:center;
+  margin-top:26px;
+  font-size:11.5px;
+  color:#4c5678;
+  letter-spacing:.05em;
+}
+footer a{color:#7c88ad;text-decoration:none;}
+</style>
+</head>
+<body>
+
+<div class="sky" id="sky"></div>
+
+<div class="card">
+  <div class="belt"><span></span><div class="line"></div><span></span><div class="line"></div><span></span></div>
+  <h1>ORION&#8209;MD</h1>
+  <p class="tagline">Pair your WhatsApp number to your bot</p>
+
+  <label for="number">WhatsApp Number</label>
+  <div class="input-row">
+    <input type="text" id="number" placeholder="e.g. 15551234567 (country code, no + or spaces)" autocomplete="off" />
+  </div>
+  <button id="pairBtn" onclick="requestCode()">Get Pairing Code</button>
+
+  <div class="result" id="result">
+    <div class="label">Your Pairing Code</div>
+    <div class="code" id="code">— — — —</div>
+  </div>
+
+  <div class="status" id="status"></div>
+
+  <div class="steps">
+    1. Open WhatsApp &rarr; <b>Settings &rarr; Linked Devices</b><br/>
+    2. Tap <b>Link a Device &rarr; Link with phone number instead</b><br/>
+    3. Enter the code shown above before it expires
+  </div>
+
+  <footer>MADE IN BY INCONNU BOY SENSEI</footer>
+</div>
+
+<script>
+(function stars(){
+  const sky = document.getElementById('sky');
+  const count = 60;
+  for(let i=0;i<count;i++){
+    const s = document.createElement('span');
+    s.style.left = Math.random()*100+'vw';
+    s.style.top = Math.random()*100+'vh';
+    s.style.animationDelay = (Math.random()*4)+'s';
+    sky.appendChild(s);
+  }
+})();
+
+async function requestCode(){
+  const numberInput = document.getElementById('number');
+  const btn = document.getElementById('pairBtn');
+  const result = document.getElementById('result');
+  const codeEl = document.getElementById('code');
+  const statusEl = document.getElementById('status');
+
+  const number = numberInput.value.replace(/[^0-9]/g, '');
+  statusEl.className = 'status';
+  statusEl.textContent = '';
+
+  if(!number){
+    statusEl.className = 'status err';
+    statusEl.textContent = 'Enter a valid number with country code.';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Requesting...';
+  result.classList.remove('show');
+
+  try{
+    const res = await fetch('/code?number=' + encodeURIComponent(number));
+    const data = await res.json();
+
+    if(!res.ok){
+      statusEl.className = 'status err';
+      statusEl.textContent = data.message || data.error || 'Something went wrong. Try again.';
+    }else if(data.status === 'already_connected'){
+      statusEl.className = 'status ok';
+      statusEl.textContent = data.message;
+    }else if(data.code){
+      codeEl.textContent = data.code;
+      result.classList.add('show');
+      statusEl.className = 'status ok';
+      statusEl.textContent = 'Code generated. It expires shortly, act fast.';
+    }else{
+      statusEl.className = 'status err';
+      statusEl.textContent = 'No code returned. Try again in a moment.';
+    }
+  }catch(err){
+    statusEl.className = 'status err';
+    statusEl.textContent = 'Could not reach the server. Try again.';
+  }finally{
+    btn.disabled = false;
+    btn.textContent = 'Get Pairing Code';
+  }
+}
+</script>
+
+</body>
+</html>
